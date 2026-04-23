@@ -1,67 +1,50 @@
-# Spicetify View Playlists With Song
+# View Playlists With Song
 
-A robust Spicetify extension that lets you instantly find all the playlists you own that contain a specific song. Right-click any track and select **View Playlists with Song** to see exactly where you've saved it!
+Hey guys, here's a Spicetify extension I put together. Basically, it adds a "View Playlists with Song" option to the right-click menu in Spotify. Click it, and it'll show you exactly which of your playlists have that specific song. 
 
-> **Credits:** This project is heavily inspired by and based on [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong). Significant enhancements have been made to support the latest Spotify/Spicetify internal APIs, improve metadata resolution, and perfect the UI/UX.
+Credits: Big thanks to the original [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong) project that inspired this. I took that idea, completely rewrote how it grabs track metadata (so you actually get the album art and duration even when the song isn't currently playing), fixed up the alignment issues, and made it run a lot smoother on the latest Spicetify builds.
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
-Popup Menu:
-<br>
 <img src="preview-contextmenu.png" alt="Context Menu Option" width="350"/>
-
-<br>
-Search Results:
-<br>
+<br/>
 <img src="preview-popup.png" alt="Playlists Popup Modal" width="500"/>
 
 ---
 
-## ✨ Features
+## Features
 
-- **Fast & Responsive:** Caches playlist data so subsequent searches are instantaneous.
-- **Robust Metadata Resolution:** Uses an advanced 5-tier fallback system (Player -> GraphQL -> Cosmos -> Internal WG -> Basic) to guarantee track metadata (artist, album, imagery, duration) resolves accurately even when you're not playing the track or when you hit rate limits.
-- **Perfect Spicetify Alignment:** CSS logic uses customized CSS variable gutters (`--vpws-gutter`) for pixel-perfect vertical alignment and hides ugly native scrollbars while preserving scrolling functionality.
-- **Clickable UI:** Includes clickable cover arts to open the track's album, clickable playlist cards to jump to the exact location of the song in bounds.
-- **Reduced Motion Support:** Respects your Windows/macOS accessibility settings and disables animations gracefully.
+- **It actually finds your stuff:** Instantly searches across your owned playlists to find where you stashed a track.
+- **Accurate Metadata:** Uses a multi-fallback approach (GraphQL, Cosmos, Internal WG endpoints) so album cover, artist, and duration show up correctly. No more annoying "Unknown artist" cards.
+- **Clean UI:** Got rid of the ugly native scrollbars while keeping it scrollable. Everything aligns nicely.
+- **Clickable:** You can click the cover art to go to the track's album, and clicking the playlist jumps you right to it.
+- **Fast:** Caches your playlists so searching is instant the second time around.
 
 ---
 
-## 📦 Installation
+## Installation
 
-### Option 1: Spicetify Marketplace (Recommended)
-
-1. Open Spotify and navigate to the **Marketplace** (shopping cart icon).
-2. Go to the **Extensions** tab.
+### Method 1: Spicetify Marketplace (Easiest)
+*(Once it's approved on Marketplace!)*
+1. Click the Shopping Cart icon in Spotify.
+2. Go over to extensions.
 3. Search for "View Playlists With Song".
-4. Click the install button (⬇️).
+4. Hit install.
 
-### Option 2: Manual Installation
-
-1. Download the [`ViewPlaylistsWithSong.js`](ViewPlaylistsWithSong.js) file from this repository.
-2. Place the downloaded file into your Spicetify extensions folder:
-    - **Windows:** `%appdata%\spicetify\Extensions`
-    - **Linux:** `~/.config/spicetify/Extensions`
-    - **MacOS:** `~/spicetify_data/Extensions`
-3. Run the following commands:
+### Method 2: Manual Install
+1. Grab `ViewPlaylistsWithSong.js` from this repo.
+2. Drop it into your Spicetify extensions folder:
+   - **Windows:** `%appdata%\spicetify\Extensions`
+   - **Mac:** `~/spicetify_data/Extensions`
+   - **Linux:** `~/.config/spicetify/Extensions`
+3. Open up your terminal and run:
    ```bash
    spicetify config extensions ViewPlaylistsWithSong.js
    spicetify apply
    ```
 
 ---
-
-## 🛠️ How it works
-
-Behind the scenes, this extension leverages:
-- `Spicetify.Platform.PlaylistAPI` for iterating over your owned playlists.
-- Rootlist and local browser APIs to traverse playlist contents cleanly.
-- `Spicetify.GraphQL` and internal `wg://` API hooks for failproof data extraction.
-- A dynamically injected `<style>` block and React element mappings for the PopupModal.
-
----
-
-## 📝 License
-This extension inherits the original project's MIT License. Please refer to [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong) for the original codebase.
+**Author:** Phillip ([Github](https://github.com/andador-kim-phillip))
+*(Note: If your github name is different, feel free to update the link above!)*
