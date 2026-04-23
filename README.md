@@ -12,7 +12,7 @@
 
 ---
 
-## 📸 Screenshots
+## <img src="https://img.icons8.com/color/48/camera.png" width="24" align="center"/> Screenshots
 
 I built this so it looks just like a native part of the Spotify UI. Here's what navigating it looks like:
 
@@ -44,17 +44,17 @@ I built this so it looks just like a native part of the Spotify UI. Here's what 
 
 ---
 
-## ✨ Features
+## <img src="https://img.icons8.com/color/48/sparkling.png" width="24" align="center"/> Features
 
-- 🔍 **It actually finds your stuff:** Instantly searches across your owned playlists to find where you stashed a track.
-- 💿 **Accurate Metadata (5-Tier Fallback):** Rebuilt the backend entirely. It uses GraphQL, Cosmos, and Internal WG endpoints to ensure the album cover, artist, and duration load perfectly. No more annoying "Unknown artist" cards.
-- 🎨 **Clean UI & Perfect Alignment:** Removed the ugly native scrollbars while keeping everything smoothly scrollable. Custom CSS logic ensures it fits Spotify's dark aesthetic perfectly.
-- 🖱️ **Fully Clickable:** You can click the cover art to go to the track's album, and clicking the playlist jumps you exactly to it.
-- ⚡ **Lightning Fast:** Caches your playlists so searching is instant the second time around!
+- <img src="https://img.icons8.com/color/48/search.png" width="18" align="center"/> **It actually finds your stuff:** Instantly searches across your owned playlists to find where you stashed a track.
+- <img src="https://img.icons8.com/color/48/cd.png" width="18" align="center"/> **Accurate Metadata (5-Tier Fallback):** Rebuilt the backend entirely. It uses GraphQL, Cosmos, and Internal WG endpoints to ensure the album cover, artist, and duration load perfectly. No more annoying "Unknown artist" cards.
+- <img src="https://img.icons8.com/color/48/paint-palette.png" width="18" align="center"/> **Clean UI & Perfect Alignment:** Removed the ugly native scrollbars while keeping everything smoothly scrollable. Custom CSS logic ensures it fits Spotify's dark aesthetic perfectly.
+- <img src="https://img.icons8.com/color/48/mouse-left-click.png" width="18" align="center"/> **Fully Clickable:** You can click the cover art to go to the track's album, and clicking the playlist jumps you exactly to it.
+- <img src="https://img.icons8.com/color/48/flash-on.png" width="18" align="center"/> **Lightning Fast:** Caches your playlists so searching is instant the second time around!
 
 ---
 
-## 📦 Installation
+## <img src="https://img.icons8.com/color/48/box.png" width="24" align="center"/> Installation
 
 ### Method 1: Spicetify Marketplace (Recommended)
 *(Coming soon once the automated Github scraper picks it up!)*
@@ -77,7 +77,7 @@ I built this so it looks just like a native part of the Spotify UI. Here's what 
 
 ---
 
-## 🤝 Credits
+## <img src="https://img.icons8.com/color/48/handshake.png" width="24" align="center"/> Credits
 
 Big thanks to the original [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong) project that inspired this. I took that concept, completely reverse-engineered the metadata fetching so data actually appears, fixed the UI rendering/alignment, and optimized it for the latest Spicetify builds. 
 
