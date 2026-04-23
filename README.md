@@ -1,4 +1,6 @@
-<h1 align="center">🎵 View Playlists With Song</h1>
+<h1 align="center">
+  <img src="melior-icon.png" width="48" align="center"/> Melior
+</h1>
 
 <p align="center">
   <img alt="Spicetify" src="https://img.shields.io/badge/Spicetify-Extension-success?style=for-the-badge&logo=spotify">
@@ -6,8 +8,8 @@
 </p>
 
 <p align="center">
-  <b>A Spicetify extension that instantly finds exactly which of your playlists contain a specific song.</b><br>
-  <i>Hey guys, I threw this extension together to solve a simple problem: figuring out where I saved a track. Just right-click any song in Spotify and it'll fetch all the playlists you own that have it!</i>
+  <b>A sleek Spicetify extension that instantly finds exactly which of your playlists contain a specific song.</b><br>
+  <i>I threw this together to solve a simple problem: figuring out where I saved a track. Just right-click any song in Spotify and it'll fetch all the playlists you own that have it!</i>
 </p>
 
 ---
@@ -21,7 +23,7 @@ I built this so it looks just like a native part of the Spotify UI. Here's what 
     <td align="center"><b>1. The Context Menu</b></td>
   </tr>
   <tr>
-    <td align="center">Just right-click any track (whether you're playing it or not) and hit the new <b>View Playlists with Song</b> option.</td>
+    <td align="center">Just right-click any track (whether you're playing it or not) and hit the new <b>Melior: Find in Playlists</b> option.</td>
   </tr>
   <tr>
     <td align="center"><img src="preview-contextmenu.png" alt="Context Menu Option" width="400"/></td>
@@ -60,7 +62,7 @@ I built this so it looks just like a native part of the Spotify UI. Here's what 
 *(Coming soon once the automated Github scraper picks it up!)*
 1. Click the Shopping Cart icon in Spotify.
 2. Go over to the **Extensions** tab.
-3. Search for **"View Playlists With Song"**.
+3. Search for **"Melior"**.
 4. Hit install.
 
 ### Method 2: Manual Install
@@ -79,7 +81,7 @@ I built this so it looks just like a native part of the Spotify UI. Here's what 
 
 ## <img src="https://img.icons8.com/color/48/handshake.png" width="24" align="center"/> Credits
 
-Big thanks to the original [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong) project that inspired this. I took that concept, completely reverse-engineered the metadata fetching so data actually appears, fixed the UI rendering/alignment, and optimized it for the latest Spicetify builds. 
+This extension was built utilizing some base logic originating from [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong). I took that concept, completely reverse-engineered the metadata fetching so data actually appears, fixed the UI rendering and alignment, added the new Melior branding, and optimized it for the latest Spicetify builds.
 
 ---
 <p align="center">

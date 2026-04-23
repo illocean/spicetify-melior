@@ -1,7 +1,7 @@
-// NAME: ViewPlaylistsWithSong
+// NAME: Melior
 // AUTHOR: elijaholmos, huhridge, locally rewritten for current Spotify builds
-// DESCRIPTION: Lists playlists containing a track in a popup without hijacking Spotify pages
-// VERSION: 3.0.0-local
+// DESCRIPTION: Lists your playlists containing a specific track in a popup without hijacking Spotify pages
+// VERSION: 3.1.0-local
 
 /// <reference path="../globals.d.ts" />
 
@@ -415,6 +415,12 @@
 
             /* ── Empty / Loading ──────────────────────────── */
             .vpws-empty {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                box-sizing: border-box;
                 padding: 32px 24px;
                 text-align: center;
                 font-size: 14px;
@@ -1092,14 +1098,14 @@
     // ── Entry Points ─────────────────────────────────────────────────
     function showTrackPopup(trackUri) {
         if (!isTrackUri(trackUri)) {
-            Spicetify.showNotification("ViewPlaylistsWithSong: no valid track was provided.", true);
+            Spicetify.showNotification("Melior: no valid track was provided.", true);
             return;
         }
         injectStyles();
         PopupModal.display({
             content: react.createElement(ResultsModal, { targetUri: trackUri }),
             isLarge: true,
-            title: "View Playlists with Song",
+            title: "Melior",
         });
     }
 
@@ -1110,7 +1116,7 @@
     function listPlaylistsForCurrentTrack() {
         const uri = getCurrentTrackUri();
         if (!uri) {
-            Spicetify.showNotification("ViewPlaylistsWithSong: nothing is currently playing.", true);
+            Spicetify.showNotification("Melior: nothing is currently playing.", true);
             return;
         }
         showTrackPopup(uri);
@@ -1120,8 +1126,8 @@
         return uris.length === 1 && isTrackUri(uris[0]);
     }
 
-    new Spicetify.ContextMenu.Item("View Playlists with Song", listPlaylistsForUris, shouldDisplayContextMenu, "search").register();
-    new Spicetify.Menu.Item("View Playlists for Current Song", false, listPlaylistsForCurrentTrack, "search").register();
+    new Spicetify.ContextMenu.Item("Melior: Find in Playlists", listPlaylistsForUris, shouldDisplayContextMenu, "search").register();
+    new Spicetify.Menu.Item("Melior: Find Current Track", false, listPlaylistsForCurrentTrack, "search").register();
 
     document.addEventListener("keydown", (event) => {
         if (event.target && ["INPUT", "TEXTAREA"].includes(event.target.tagName)) return;
