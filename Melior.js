@@ -5,7 +5,7 @@
 
 /// <reference path="../globals.d.ts" />
 
-(async function ViewPlaylistsWithSong() {
+(async function Melior() {
     const {
         ContextMenu,
         CosmosAsync,
@@ -18,14 +18,14 @@
     } = Spicetify;
 
     if (!(ContextMenu && CosmosAsync && Menu && Player && Platform && PopupModal && react && URI)) {
-        setTimeout(ViewPlaylistsWithSong, 1000);
+        setTimeout(Melior, 1000);
         return;
     }
 
-    if (globalThis.__viewPlaylistsWithSongRegistered) {
+    if (globalThis.__meliorRegistered) {
         return;
     }
-    globalThis.__viewPlaylistsWithSongRegistered = true;
+    globalThis.__meliorRegistered = true;
 
     // ── Cache layer ──────────────────────────────────────────────────
     const CACHE_TTL = 120_000; // 2 minutes
@@ -56,7 +56,7 @@
     }
 
     // ── Styles ───────────────────────────────────────────────────────
-    const STYLE_ID = "view-playlists-with-song-styles";
+    const STYLE_ID = "melior-styles";
 
     function injectStyles() {
         if (document.getElementById(STYLE_ID)) return;
@@ -103,28 +103,30 @@
                 height: 0 !important;
             }
 
-            /* Also catch any Spotify modal-content wrappers */
-            .main-trackCreditsModal-mainSection * {
-                scrollbar-width: none !important;
-                -ms-overflow-style: none !important;
-            }
-            .main-trackCreditsModal-mainSection *::-webkit-scrollbar {
-                display: none !important;
-                width: 0 !important;
-                height: 0 !important;
-            }
+            /* ════════════════════════════════════════════════
+               VPWS MODAL — Auto-height layout
+               Architecture:
+                 .vpws-modal                (auto height, max-height when results)
+                   .vpws-track              (flex-shrink: 0)
+                   .vpws-progress-wrap      (flex-shrink: 0, only when scanning)
+                   .vpws-status-row         (flex-shrink: 0)
+                   .vpws-results-wrap       (max-height, scroll)
+                   .vpws-empty              (min-height block, flex-centered)
+               ════════════════════════════════════════════════ */
 
-            /* ── Reset & Modal Shell ─────────────────────── */
+            /* ── Modal Shell ─────────────────────────────── */
             .vpws-modal {
                 --vpws-gutter: 20px;
+                --vpws-radius: 12px;
+
+                box-sizing: border-box;
                 color: var(--spice-text);
                 display: flex;
                 flex-direction: column;
-                gap: 0;
-                max-height: 72vh;
-                width: min(880px, 90vw);
+                height: auto;
                 overflow: hidden;
                 position: relative;
+                width: min(860px, 92vw);
             }
 
             /* ── Track Hero ──────────────────────────────── */
@@ -133,18 +135,18 @@
                 background:
                     linear-gradient(
                         160deg,
-                        rgba(var(--spice-rgb-button), 0.08) 0%,
-                        transparent 60%
+                        rgba(var(--spice-rgb-button), 0.09) 0%,
+                        transparent 65%
                     ),
                     var(--spice-card);
-                border-radius: 10px 10px 0 0;
                 display: flex;
-                gap: 14px;
-                padding: 18px var(--vpws-gutter);
                 flex-shrink: 0;
-                position: relative;
+                gap: 16px;
                 overflow: hidden;
+                padding: 20px var(--vpws-gutter);
+                position: relative;
             }
+            /* divider line beneath hero */
             .vpws-track::after {
                 content: "";
                 position: absolute;
@@ -155,126 +157,110 @@
                 background: linear-gradient(
                     90deg,
                     transparent,
-                    rgba(var(--spice-rgb-text), 0.08) 20%,
-                    rgba(var(--spice-rgb-text), 0.08) 80%,
+                    rgba(var(--spice-rgb-text), 0.1) 25%,
+                    rgba(var(--spice-rgb-text), 0.1) 75%,
                     transparent
                 );
             }
+
+            /* ── Track artwork (shared placeholder style) ── */
             .vpws-track-art,
             .vpws-playlist-art {
-                background:
-                    linear-gradient(
-                        135deg,
-                        rgba(var(--spice-rgb-selected-row), 0.5),
-                        rgba(var(--spice-rgb-shadow), 0.2)
-                    ),
-                    var(--spice-sidebar);
+                background: linear-gradient(
+                    135deg,
+                    rgba(var(--spice-rgb-selected-row), 0.5),
+                    rgba(var(--spice-rgb-shadow), 0.25)
+                );
                 border-radius: 8px;
                 display: block;
-                object-fit: cover;
                 flex-shrink: 0;
+                object-fit: cover;
             }
             .vpws-track-art {
-                height: 72px;
-                width: 72px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+                height: 68px;
+                width: 68px;
+                box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32);
             }
             .vpws-track-info {
                 flex: 1;
                 min-width: 0;
             }
             .vpws-track-title {
-                font-size: 20px;
+                font-size: 19px;
                 font-weight: 800;
                 letter-spacing: -0.02em;
-                line-height: 1.15;
+                line-height: 1.2;
                 margin: 0;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
-            .vpws-track-meta,
-            .vpws-summary,
-            .vpws-playlist-meta,
-            .vpws-empty {
+            .vpws-track-meta {
                 color: var(--spice-subtext);
                 font-size: 13px;
                 line-height: 1.5;
-                margin: 0;
-            }
-            .vpws-track-meta {
-                margin-top: 2px;
+                margin: 3px 0 0;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
 
             /* ── Progress bar ────────────────────────────── */
+            /*  Horizontal padding keeps the bar off the edges.
+                Vertical padding gives it breathing room.       */
             .vpws-progress-wrap {
-                flex-shrink: 0;
-                padding: 0 var(--vpws-gutter);
+                align-items: center;
                 background: var(--spice-card);
+                box-sizing: border-box;
+                display: flex;
+                flex-shrink: 0;
+                padding: 8px var(--vpws-gutter) 6px;
             }
             .vpws-progress {
-                height: 3px;
-                width: 100%;
-                background: rgba(var(--spice-rgb-text), 0.06);
+                background: rgba(var(--spice-rgb-text), 0.08);
                 border-radius: 2px;
+                flex: 1;
+                height: 3px;
                 overflow: hidden;
             }
             .vpws-progress-bar {
-                height: 100%;
                 background: var(--spice-button);
                 border-radius: 2px;
-                transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+                height: 100%;
+                transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
                 will-change: width;
             }
 
-            /* ── Status Row (summary + actions) ──────────── */
+            /* ── Status row ──────────────────────────────── */
             .vpws-status-row {
-                display: flex;
                 align-items: center;
-                justify-content: space-between;
-                gap: 12px;
-                padding: 10px var(--vpws-gutter) 6px;
-                flex-shrink: 0;
                 background: var(--spice-card);
+                box-sizing: border-box;
+                display: flex;
+                flex-shrink: 0;
+                gap: 12px;
+                justify-content: space-between;
+                padding: 6px var(--vpws-gutter) 10px;
             }
             .vpws-summary {
-                font-size: 12px;
-                font-weight: 600;
+                color: var(--spice-subtext);
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                margin: 0;
+                opacity: 0.75;
                 text-transform: uppercase;
-                letter-spacing: 0.04em;
-                opacity: 0.6;
-            }
-            .vpws-status-actions {
-                display: flex;
-                gap: 6px;
             }
 
-            /* ── Results Container (NO scrollbar) ────────── */
+            /* ── Results (capped scroll list) ───────────── */
             .vpws-results-wrap {
-                flex: 1;
-                min-height: 0;
-                overflow-y: auto;
+                box-sizing: border-box;
+                max-height: 360px;
                 overflow-x: hidden;
-                padding: 6px var(--vpws-gutter) 20px;
+                overflow-y: auto;
+                padding: 10px var(--vpws-gutter) 20px;
                 scrollbar-width: none;
                 -ms-overflow-style: none;
-                mask-image: linear-gradient(
-                    to bottom,
-                    transparent 0px,
-                    black 12px,
-                    black calc(100% - 16px),
-                    transparent 100%
-                );
-                -webkit-mask-image: linear-gradient(
-                    to bottom,
-                    transparent 0px,
-                    black 12px,
-                    black calc(100% - 16px),
-                    transparent 100%
-                );
             }
             .vpws-results-wrap::-webkit-scrollbar {
                 display: none;
@@ -287,9 +273,46 @@
                 gap: 8px;
             }
 
+            /* ── Empty state ─────────────────────────────── */
+            /*  Normal-flow block with own min-height so it   */
+            /*  centers its content without needing a parent  */
+            /*  with a definite height.                        */
+            .vpws-empty {
+                align-items: center;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: 160px;
+                padding: 24px var(--vpws-gutter);
+                text-align: center;
+                width: 100%;
+            }
+            .vpws-empty-icon {
+                display: block;
+                font-size: 38px;
+                line-height: 1;
+                margin-bottom: 14px;
+                opacity: 0.35;
+                text-align: center;
+                width: 100%;
+            }
+            .vpws-empty-text {
+                color: var(--spice-subtext);
+                display: block;
+                font-size: 13px;
+                font-weight: 500;
+                line-height: 1.6;
+                margin: 0 auto;
+                max-width: 280px;
+                opacity: 0.85;
+                text-align: center;
+            }
+
             /* ── Playlist Card ───────────────────────────── */
             .vpws-card {
                 align-items: center;
+                animation: vpws-card-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
                 background: rgba(var(--spice-rgb-main-elevated), 0.55);
                 border: 1px solid rgba(var(--spice-rgb-shadow), 0.1);
                 border-radius: 10px;
@@ -297,49 +320,44 @@
                 display: grid;
                 gap: 14px;
                 grid-template-columns: 48px 1fr auto;
+                opacity: 0;
                 padding: 10px 16px;
+                transform: translateY(8px);
                 transition:
                     transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
                     background 0.2s ease,
                     border-color 0.2s ease,
                     box-shadow 0.25s ease;
                 will-change: transform;
-                opacity: 0;
-                transform: translateY(8px);
-                animation: vpws-card-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            }
+            @keyframes vpws-card-in {
+                to { opacity: 1; transform: translateY(0); }
             }
             .vpws-card:hover {
                 background: rgba(var(--spice-rgb-main-elevated), 0.85);
                 border-color: rgba(var(--spice-rgb-button), 0.25);
-                transform: translateY(-1px);
                 box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+                transform: translateY(-1px);
             }
             .vpws-card:active {
                 transform: scale(0.985);
                 transition-duration: 0.08s;
             }
             .vpws-card:focus-visible {
+                border-radius: 10px;
                 outline: 2px solid var(--spice-button);
                 outline-offset: 2px;
-                border-radius: 10px;
-            }
-            @keyframes vpws-card-in {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
             }
 
             .vpws-playlist-art {
-                height: 48px;
-                width: 48px;
                 border-radius: 6px;
+                height: 48px;
                 transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+                width: 48px;
             }
             .vpws-card:hover .vpws-playlist-art {
                 transform: scale(1.06);
             }
-
             .vpws-playlist-title {
                 color: var(--spice-text);
                 font-size: 14px;
@@ -355,10 +373,10 @@
                 font-size: 12px;
                 line-height: 1.35;
                 margin: 2px 0 0;
+                max-width: 420px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                max-width: 420px;
             }
 
             /* ── Track position badge ────────────────────── */
@@ -366,19 +384,19 @@
                 background: rgba(var(--spice-rgb-button), 0.12);
                 border-radius: 6px;
                 color: var(--spice-button);
+                flex-shrink: 0;
                 font-size: 12px;
                 font-weight: 700;
                 letter-spacing: 0.02em;
                 padding: 4px 10px;
-                white-space: nowrap;
-                flex-shrink: 0;
                 transition: background 0.2s ease;
+                white-space: nowrap;
             }
             .vpws-card:hover .vpws-badge {
                 background: rgba(var(--spice-rgb-button), 0.22);
             }
 
-            /* ── Buttons ─────────────────────────────────── */
+            /* ── Ghost open-track button ─────────────────── */
             .vpws-btn {
                 appearance: none;
                 background: var(--spice-button);
@@ -409,27 +427,8 @@
                 color: var(--spice-text);
             }
             .vpws-btn--ghost:hover {
-                border-color: rgba(var(--spice-rgb-text), 0.3);
                 background: rgba(var(--spice-rgb-text), 0.04);
-            }
-
-            /* ── Empty / Loading ──────────────────────────── */
-            .vpws-empty {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-                box-sizing: border-box;
-                padding: 32px 24px;
-                text-align: center;
-                font-size: 14px;
-                opacity: 0.7;
-            }
-            .vpws-empty-icon {
-                font-size: 32px;
-                margin-bottom: 8px;
-                opacity: 0.4;
+                border-color: rgba(var(--spice-rgb-text), 0.3);
             }
 
             /* ── Cached badge ─────────────────────────────── */
@@ -447,37 +446,25 @@
             /* ── Responsive ──────────────────────────────── */
             @media (max-width: 640px) {
                 .vpws-modal {
+                    --vpws-gutter: 14px;
                     width: 96vw;
-                    max-height: 80vh;
-                }
-                .vpws-track {
-                    padding: 14px 16px;
-                    gap: 12px;
                 }
                 .vpws-track-art {
-                    height: 56px;
-                    width: 56px;
+                    height: 52px;
+                    width: 52px;
                 }
-                .vpws-track-title {
-                    font-size: 16px;
-                }
-                .vpws-modal {
-                    --vpws-gutter: 14px;
-                }
+                .vpws-track-title { font-size: 16px; }
                 .vpws-card {
-                    grid-template-columns: 40px 1fr auto;
                     gap: 10px;
+                    grid-template-columns: 40px 1fr auto;
                     padding: 8px 10px;
                 }
                 .vpws-playlist-art {
                     height: 40px;
                     width: 40px;
                 }
-                .vpws-playlist-title {
-                    font-size: 13px;
-                }
-                .vpws-playlist-desc {
-                    display: none;
+                .vpws-results-wrap {
+                    max-height: 55vh;
                 }
             }
 
@@ -712,7 +699,7 @@
                 return gqlResult;
             }
         } catch (e) {
-            console.warn("ViewPlaylistsWithSong: GraphQL track fetch failed:", e?.message || e);
+            console.warn("Melior: GraphQL track fetch failed:", e?.message || e);
         }
 
         // ── Tier 3: Cosmos Web API (may rate-limit) ──
@@ -723,7 +710,7 @@
                 return cosmosResult;
             }
         } catch (e) {
-            console.warn("ViewPlaylistsWithSong: Cosmos track fetch failed:", e?.message || e);
+            console.warn("Melior: Cosmos track fetch failed:", e?.message || e);
         }
 
         // ── Tier 4: Try Spicetify internal track lookup ──
@@ -751,7 +738,7 @@
                 return result;
             }
         } catch (e) {
-            console.warn("ViewPlaylistsWithSong: wg track fetch failed:", e?.message || e);
+            console.warn("Melior: wg track fetch failed:", e?.message || e);
         }
 
         // ── Tier 5: Bare-minimum fallback ──
@@ -847,7 +834,7 @@
                     try {
                         return await withTimeout(checkPlaylist(p, trackUri), 3000, `scan:${p.uri}`);
                     } catch (e) {
-                        console.error("ViewPlaylistsWithSong: scan fail", p.uri, e);
+                        console.error("Melior: scan fail", p.uri, e);
                         return null;
                     }
                 })
@@ -1033,7 +1020,7 @@
                     setState((s) => ({ ...s, matches: result.matches, processed: result.total, status: "done", total: result.total }));
                 } catch (e) {
                     if (dead) return;
-                    console.error("ViewPlaylistsWithSong failed", e);
+                    console.error("Melior failed", e);
                     setState((s) => ({ ...s, error: e?.message || String(e), status: "error" }));
                 }
             }
@@ -1042,15 +1029,15 @@
             return () => { dead = true; };
         }, [targetUri]);
 
-        const els = [];
-
-        els.push(react.createElement(TrackHero, { key: "hero", track: state.track }));
+        // ── Build header elements (always outside body) ──
+        const headerEls = [];
+        headerEls.push(react.createElement(TrackHero, { key: "hero", track: state.track }));
 
         if (state.status === "loading") {
-            els.push(react.createElement(ProgressBar, { key: "bar", processed: state.processed, total: state.total }));
+            headerEls.push(react.createElement(ProgressBar, { key: "bar", processed: state.processed, total: state.total }));
         }
 
-        els.push(
+        headerEls.push(
             react.createElement(StatusRow, {
                 key: "status",
                 processed: state.processed,
@@ -1060,39 +1047,48 @@
             })
         );
 
+        // ── Build body content (lives inside .vpws-body) ──
+        let bodyContent = null;
+
         if (state.status === "error") {
-            els.push(react.createElement("p", { className: "vpws-empty", key: "err" }, state.error));
+            bodyContent = react.createElement(
+                "div",
+                { className: "vpws-empty", key: "err" },
+                react.createElement("span", { className: "vpws-empty-icon" }, "⚠️"),
+                react.createElement("span", { className: "vpws-empty-text" }, state.error)
+            );
         } else if (state.status === "done" && state.matches.length === 0) {
-            els.push(
-                react.createElement(
-                    "div",
-                    { className: "vpws-empty", key: "empty" },
-                    react.createElement("div", { className: "vpws-empty-icon" }, "🔍"),
-                    "This track was not found in any of your own playlists."
-                )
+            bodyContent = react.createElement(
+                "div",
+                { className: "vpws-empty", key: "empty" },
+                react.createElement("span", { className: "vpws-empty-icon" }, "🔍"),
+                react.createElement("span", { className: "vpws-empty-text" }, "This track was not found in any of your own playlists.")
             );
         } else if (state.matches.length > 0) {
-            els.push(
+            bodyContent = react.createElement(
+                "div",
+                { className: "vpws-results-wrap", key: "wrap" },
                 react.createElement(
                     "div",
-                    { className: "vpws-results-wrap", key: "wrap" },
-                    react.createElement(
-                        "div",
-                        { className: "vpws-results" },
-                        state.matches.map((p, i) =>
-                            react.createElement(PlaylistCard, {
-                                key: `${p.uri}-${p.index}`,
-                                playlist: p,
-                                trackUri: targetUri,
-                                index: i,
-                            })
-                        )
+                    { className: "vpws-results" },
+                    state.matches.map((p, i) =>
+                        react.createElement(PlaylistCard, {
+                            key: `${p.uri}-${p.index}`,
+                            playlist: p,
+                            trackUri: targetUri,
+                            index: i,
+                        })
                     )
                 )
             );
         }
 
-        return react.createElement("div", { className: "vpws-modal", ref: modalRef }, ...els);
+        return react.createElement(
+            "div",
+            { className: "vpws-modal", ref: modalRef },
+            ...headerEls,
+            bodyContent
+        );
     }
 
     // ── Entry Points ─────────────────────────────────────────────────

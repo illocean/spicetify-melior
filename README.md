@@ -1,90 +1,82 @@
-<h1 align="center">
-  <img src="melior-icon.png" width="48" align="center"/> Melior
-</h1>
+<div align="center">
+  <img src="melior-icon.svg" width="96" alt="Melior Logo"/>
+  <h1>Melior</h1>
 
-<p align="center">
-  <img alt="Spicetify" src="https://img.shields.io/badge/Spicetify-Extension-success?style=for-the-badge&logo=spotify">
-  <img alt="License" src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge">
-</p>
+  <p>
+    <img alt="Spicetify" src="https://img.shields.io/badge/Spicetify-Extension-success?style=for-the-badge&logo=spotify&color=1DB954">
+    <img alt="License" src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge&color=282828">
+  </p>
 
-<p align="center">
-  <b>A sleek Spicetify extension that instantly finds exactly which of your playlists contain a specific song.</b><br>
-  <i>I threw this together to solve a simple problem: figuring out where I saved a track. Just right-click any song in Spotify and it'll fetch all the playlists you own that have it!</i>
-</p>
+  <p>
+    <b>A Spicetify extension that queries and displays user-owned playlists containing a specific track.</b>
+  </p>
+</div>
 
----
+<br>
 
-## <img src="https://img.icons8.com/color/48/camera.png" width="24" align="center"/> Screenshots
+## Overview
 
-I built this so it looks just like a native part of the Spotify UI. Here's what navigating it looks like:
+Melior integrates natively into the Spotify desktop client, adding a context menu action to identify which of your personal playlists feature the selected song. The extension presents the results in a custom modal engineered to match Spotify's native design language.
 
-<table align="center">
+## Architecture & Features
+
+- **Playlist Discovery:** Queries all user-owned playlists to find instances of a specific track directly from the context menu.
+- **Accurate Metadata Resolution:** Utilizes a custom 5-tier fallback mechanism (GraphQL, Cosmos, and Internal Web Platform endpoints) to guarantee reliable retrieval of album artwork, artist attributes, and track duration.
+- **Native User Interface:** The modal utilizes a responsive flexbox architecture to ensure consistent vertical alignment and spacing. It maintains a compact layout with scrollable lists, free of native window scrollbars.
+- **Interactive Navigation:** The modal provides direct routing capabilities; users can click the track artwork to access the source album or select a playlist entry to navigate directly to it.
+- **Performance Optimization:** Implements local data caching for playlist indices to significantly reduce latency on subsequent queries.
+
+<br>
+
+## Interface Previews
+
+<table align="center" width="100%">
   <tr>
-    <td align="center"><b>1. The Context Menu</b></td>
-  </tr>
-  <tr>
-    <td align="center">Just right-click any track (whether you're playing it or not) and hit the new <b>Melior: Find in Playlists</b> option.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="preview-contextmenu.png" alt="Context Menu Option" width="400"/></td>
+    <td align="center" width="45%">
+      <b>Context Menu Integration</b><br><br>
+      <img src="preview-contextmenu.png" alt="Context Menu Option" width="300" style="border-radius: 6px;"/>
+    </td>
+    <td align="center" width="55%">
+      <b>Search Results Modal</b><br><br>
+      <img src="preview-popup.png" alt="Playlists Popup Modal" width="500" style="border-radius: 6px;"/>
+    </td>
   </tr>
 </table>
 
 <br>
 
-<table align="center">
-  <tr>
-    <td align="center"><b>2. The Search Results Modal</b></td>
-  </tr>
-  <tr>
-    <td align="center">A clean modal pops up showing the song's album art, artist, and exact duration. Below it, every single playlist you've saved the song to! Click the cover art to jump to the album, or click the playlist to instantly dive into it.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="preview-popup.png" alt="Playlists Popup Modal" width="600"/></td>
-  </tr>
-</table>
-
----
-
-## <img src="https://img.icons8.com/color/48/sparkling.png" width="24" align="center"/> Features
-
-- <img src="https://img.icons8.com/color/48/search.png" width="18" align="center"/> **It actually finds your stuff:** Instantly searches across your owned playlists to find where you stashed a track.
-- <img src="https://img.icons8.com/color/48/cd.png" width="18" align="center"/> **Accurate Metadata (5-Tier Fallback):** Rebuilt the backend entirely. It uses GraphQL, Cosmos, and Internal WG endpoints to ensure the album cover, artist, and duration load perfectly. No more annoying "Unknown artist" cards.
-- <img src="https://img.icons8.com/color/48/paint-palette.png" width="18" align="center"/> **Clean UI & Perfect Alignment:** Removed the ugly native scrollbars while keeping everything smoothly scrollable. Custom CSS logic ensures it fits Spotify's dark aesthetic perfectly.
-- <img src="https://img.icons8.com/color/48/mouse-left-click.png" width="18" align="center"/> **Fully Clickable:** You can click the cover art to go to the track's album, and clicking the playlist jumps you exactly to it.
-- <img src="https://img.icons8.com/color/48/flash-on.png" width="18" align="center"/> **Lightning Fast:** Caches your playlists so searching is instant the second time around!
-
----
-
-## <img src="https://img.icons8.com/color/48/box.png" width="24" align="center"/> Installation
+## Installation Guide
 
 ### Method 1: Spicetify Marketplace (Recommended)
-*(Coming soon once the automated Github scraper picks it up!)*
-1. Click the Shopping Cart icon in Spotify.
-2. Go over to the **Extensions** tab.
-3. Search for **"Melior"**.
-4. Hit install.
 
-### Method 2: Manual Install
-1. Grab `ViewPlaylistsWithSong.js` from this repo.
-2. Drop it into your Spicetify extensions folder:
+1. Open the Spotify client and select the Marketplace icon.
+2. Navigate to the **Extensions** tab.
+3. Search the registry for **Melior**.
+4. Select install.
+
+### Method 2: Manual Installation
+
+1. Download the `Melior.js` source file from this repository.
+2. Transfer the file to your local Spicetify extensions directory:
    - **Windows:** `%appdata%\spicetify\Extensions`
-   - **Mac:** `~/spicetify_data/Extensions`
+   - **macOS:** `~/spicetify_data/Extensions`
    - **Linux:** `~/.config/spicetify/Extensions`
-3. Open up your terminal and run:
-   ```bash
-   spicetify config extensions ViewPlaylistsWithSong.js
-   spicetify apply
-   ```
+3. Execute the following commands in your terminal to apply the configuration:
 
----
+```bash
+spicetify config extensions Melior.js
+spicetify apply
+```
 
-## <img src="https://img.icons8.com/color/48/handshake.png" width="24" align="center"/> Credits
+<br>
 
-This extension was built utilizing some base logic originating from [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong). I took that concept, completely reverse-engineered the metadata fetching so data actually appears, fixed the UI rendering and alignment, added the new Melior branding, and optimized it for the latest Spicetify builds.
+## Project Credits
 
----
-<p align="center">
+This project builds upon the foundational concept introduced by [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong). The codebase has undergone a complete architectural rewrite to implement reliable metadata acquisition, establish a responsive flexbox-based UI, and guarantee compatibility with current Spicetify releases.
+
+<br>
+
+<div align="center">
   <b>Author:</b> <a href="https://github.com/pandadoor">Phillip</a><br>
-  <i>Built for the Spicetify Community</i>
-</p>
+  <i>Developed for the Spicetify ecosystem.</i>
+</div>
