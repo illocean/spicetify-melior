@@ -1,5 +1,5 @@
 // NAME: Melior
-// AUTHOR: elijaholmos, huhridge, locally rewritten for current Spotify builds
+// AUTHOR: Pandador
 // DESCRIPTION: Lists your playlists containing a specific track in a popup without hijacking Spotify pages
 // VERSION: 3.1.0-local
 
@@ -1105,7 +1105,7 @@
         PopupModal.display({
             content: react.createElement(ResultsModal, { targetUri: trackUri }),
             isLarge: true,
-            title: "Melior",
+            title: "Melior: Find in Playlists",
         });
     }
 
