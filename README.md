@@ -1,82 +1,128 @@
-<div align="center">
-  <img src="melior-icon.png" width="96" alt="Melior Logo"/>
-  <h1>Melior</h1>
+<p align="center">
+  <img src="assets/melior-icon.png" alt="Melior icon" width="140" />
+</p>
 
-  <p>
-    <img alt="Spicetify" src="https://img.shields.io/badge/Spicetify-Extension-success?style=for-the-badge&logo=spotify&color=1DB954">
-    <img alt="License" src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge&color=282828">
-  </p>
+<h1 align="center">Melior</h1>
 
-  <p>
-    <b>A Spicetify extension that queries and displays user-owned playlists containing a specific track.</b>
-  </p>
-</div>
+<p align="center">
+  A premium Spicetify extension for locating every playlist in your library that contains a selected track.
+</p>
 
-<br>
+<p align="center">
+  <img alt="Spicetify Extension" src="https://img.shields.io/badge/Spicetify-Extension-1DB954?style=for-the-badge&labelColor=111111" />
+  <img alt="Single File" src="https://img.shields.io/badge/Distribution-Single%20File-2A2A2A?style=for-the-badge&labelColor=111111" />
+  <img alt="Marketplace Ready" src="https://img.shields.io/badge/Marketplace-Ready-3B82F6?style=for-the-badge&labelColor=111111" />
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-Modern%20Spicetify-F7DF1E?style=for-the-badge&labelColor=111111&color=F7DF1E" />
+</p>
+
+<p align="center">
+  <img src="assets/preview-modal.png" alt="Melior modal preview" />
+</p>
 
 ## Overview
 
-Melior integrates natively into the Spotify desktop client, adding a context menu action to identify which of your personal playlists feature the selected song. The extension presents the results in a custom modal engineered to match Spotify's native design language.
+Melior extends the Spotify desktop client with a focused workflow for playlist discovery. From any track context menu, it scans your owned playlists, identifies where that song already lives, and presents the matches in a fast, compact workspace designed to feel native inside Spicetify.
 
-## Architecture & Features
+The goal is simple: turn "Where have I already saved this track?" into a one-step answer.
 
-- **Playlist Discovery:** Queries all user-owned playlists to find instances of a specific track directly from the context menu.
-- **Accurate Metadata Resolution:** Utilizes a custom 5-tier fallback mechanism (GraphQL, Cosmos, and Internal Web Platform endpoints) to guarantee reliable retrieval of album artwork, artist attributes, and track duration.
-- **Native User Interface:** The modal utilizes a responsive flexbox architecture to ensure consistent vertical alignment and spacing. It maintains a compact layout with scrollable lists, free of native window scrollbars.
-- **Interactive Navigation:** The modal provides direct routing capabilities; users can click the track artwork to access the source album or select a playlist entry to navigate directly to it.
-- **Performance Optimization:** Implements local data caching for playlist indices to significantly reduce latency on subsequent queries.
+## Key Features
 
-<br>
+| Feature | Details |
+| --- | --- |
+| Context menu integration | Launch Melior directly from a track in Spotify's context menu. |
+| Current-track shortcut | Query the song that is currently playing without leaving playback. |
+| Playlist discovery scan | Searches your own playlists and folders to find every matching occurrence of the selected track. |
+| Reliable metadata fallback | Uses multiple metadata sources to keep artwork, album, artist, and timing data resilient. |
+| Fast repeat lookups | Caches playlist contents and track metadata to reduce repeat latency. |
+| Direct routing | Open the source track page or jump straight into any matching playlist. |
+| GitHub profile shortcut | Includes a GitHub icon inside the modal that links to the author's GitHub profile. |
+| Single-file delivery | Ships as one extension file with embedded styling and no external CSS. |
 
-## Interface Previews
+## Gallery
 
-<table align="center" width="100%">
+<table>
   <tr>
-    <td align="center" width="45%">
-      <b>Context Menu Integration</b><br><br>
-      <img src="preview-contextmenu.png" alt="Context Menu Option" width="300" style="border-radius: 6px;"/>
+    <td width="42%">
+      <img src="assets/preview-context-menu.png" alt="Melior context menu entry in Spotify" />
+      <p align="center"><sub>Melior appears directly in the Spotify track context menu.</sub></p>
     </td>
-    <td align="center" width="55%">
-      <b>Search Results Modal</b><br><br>
-      <img src="preview-popup.png" alt="Playlists Popup Modal" width="500" style="border-radius: 6px;"/>
+    <td width="58%">
+      <img src="assets/preview-modal.png" alt="Melior modal displaying playlists that contain a selected song" />
+      <p align="center"><sub>The results modal shows every matching playlist in your library.</sub></p>
     </td>
   </tr>
 </table>
 
-<br>
+## Installation
 
-## Installation Guide
+### Marketplace
 
-### Method 1: Spicetify Marketplace (Recommended)
+This repository is prepared for Spicetify Marketplace discovery with:
 
-1. Open the Spotify client and select the Marketplace icon.
-2. Navigate to the **Extensions** tab.
-3. Search the registry for **Melior**.
-4. Select install.
+- a root `manifest.json`
+- a public repository structure compatible with Marketplace indexing
+- the `spicetify-extensions` topic on GitHub
 
-### Method 2: Manual Installation
+Once Marketplace indexing picks it up, Melior can be installed directly inside Spotify. Manual installation is available immediately.
 
-1. Download the `Melior.js` source file from this repository.
-2. Transfer the file to your local Spicetify extensions directory:
-   - **Windows:** `%appdata%\spicetify\Extensions`
-   - **macOS:** `~/spicetify_data/Extensions`
-   - **Linux:** `~/.config/spicetify/Extensions`
-3. Execute the following commands in your terminal to apply the configuration:
+### Manual Installation
+
+1. Download `Melior.js`.
+2. Copy it into your Spicetify Extensions folder.
+
+Platform paths:
+
+| Platform | Extensions folder |
+| --- | --- |
+| Windows | `%appdata%\\spicetify\\Extensions\\` |
+| macOS / Linux | `~/.config/spicetify/Extensions/` |
+
+3. Enable the extension:
 
 ```bash
 spicetify config extensions Melior.js
 spicetify apply
 ```
 
-<br>
+If you already use other extensions, append `Melior.js` instead of replacing your existing entries.
 
-## Project Credits
+## How To Use
 
-This project builds upon the foundational concept introduced by [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong). The codebase has undergone a complete architectural rewrite to implement reliable metadata acquisition, establish a responsive flexbox-based UI, and guarantee compatibility with current Spicetify releases.
+1. Right-click a track in Spotify.
+2. Choose `Melior: Find in Playlists`.
+3. Review every playlist in your library that already contains that track.
+4. Click a playlist result to open it directly in Spotify.
+5. Use the `Open Track` action to jump to the track page.
+6. Use the GitHub icon in the modal header to open the author's GitHub profile.
 
-<br>
+You can also trigger Melior for the currently playing song from the top menu entry or by using the built-in keyboard shortcut:
 
-<div align="center">
-  <b>Author:</b> <a href="https://github.com/pandadoor">Phillip</a><br>
-  <i>Developed for the Spicetify ecosystem.</i>
-</div>
+```text
+Ctrl + Alt + V
+```
+
+## Technical Notes
+
+- Built as a single-file Spicetify extension with embedded styles.
+- Scans nested rootlist folders and owned playlists through modern Spicetify platform APIs.
+- Resolves track metadata through layered fallbacks for stronger resilience against API inconsistencies.
+- Keeps playlist and track lookups cached in memory for faster repeat searches.
+- Preserves a compact modal footprint while keeping the results list scrollable and usable.
+
+## Inspiration and Attribution
+
+Melior builds on the foundational idea introduced by [spotify-util/ViewPlaylistsWithSong](https://github.com/spotify-util/ViewPlaylistsWithSong).
+
+This version is a substantial modernization focused on current Spicetify compatibility, stronger metadata reliability, improved UI quality, and a more polished user experience.
+
+## Related Projects
+
+- [Symphona](https://github.com/pandadoor/spicetify-symphona) - a routed playlist comparison extension for overlap and exclusive-track analysis.
+
+## Repository Contents
+
+| Path | Purpose |
+| --- | --- |
+| `Melior.js` | The extension entry point and shipped implementation |
+| `manifest.json` | Marketplace metadata |
+| `assets/` | Preview graphics and icon assets used in documentation and Marketplace presentation |

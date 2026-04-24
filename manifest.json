@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Melior",
+    "description": "A premium Spicetify extension for finding every playlist in your library that contains a selected track.",
+    "preview": "assets/preview-modal.png",
+    "main": "Melior.js",
+    "readme": "README.md",
+    "branch": "main",
+    "authors": [
+      {
+        "name": "pandadoor",
+        "url": "https://github.com/pandadoor"
+      }
+    ],
+    "tags": [
+      "playlist",
+      "track",
+      "discovery",
+      "ui"
+    ]
+  }
+]
