@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="melior-icon.svg" width="96" alt="Melior Logo"/>
+  <img src="melior-icon.png" width="96" alt="Melior Logo"/>
   <h1>Melior</h1>
 
   <p>
