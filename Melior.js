@@ -64,16 +64,7 @@
         const style = document.createElement("style");
         style.id = STYLE_ID;
         style.textContent = `
-            /* ═══════════════════════════════════════════════
-               NUCLEAR SCROLLBAR KILL — Spicetify Modal Chain
-               Targets every wrapper that PopupModal creates:
-               GenericModal__overlay > GenericModal >
-               main-embedWidgetGenerator-container >
-               main-trackCreditsModal-mainSection >
-               main-trackCreditsModal-originalCredits
-               ═══════════════════════════════════════════════ */
-
-            /* ── Kill scrollbars on EVERY Spicetify modal wrapper ── */
+            /* ── Kill scrollbars on Spicetify modal wrappers ── */
             .GenericModal,
             .GenericModal__overlay,
             .main-trackCreditsModal-container,
@@ -103,96 +94,57 @@
                 height: 0 !important;
             }
 
-            /* ════════════════════════════════════════════════
-               VPWS MODAL — Auto-height layout
-               Architecture:
-                 .vpws-modal                (auto height, max-height when results)
-                   .vpws-track              (flex-shrink: 0)
-                   .vpws-progress-wrap      (flex-shrink: 0, only when scanning)
-                   .vpws-status-row         (flex-shrink: 0)
-                   .vpws-results-wrap       (max-height, scroll)
-                   .vpws-empty              (min-height block, flex-centered)
-               ════════════════════════════════════════════════ */
-
-            /* ── Modal Shell ─────────────────────────────── */
+            /* ── Modal shell — width:100% fills whatever Spicetify gives ── */
             .vpws-modal {
                 --vpws-gutter: 20px;
-                --vpws-radius: 12px;
-
                 box-sizing: border-box;
                 color: var(--spice-text);
                 display: flex;
                 flex-direction: column;
-                height: auto;
                 overflow: hidden;
-                position: relative;
-                width: min(860px, 92vw);
+                width: 100%;
             }
 
-            /* ── Track Hero ──────────────────────────────── */
+            /* ── Track hero ── */
             .vpws-track {
                 align-items: center;
-                background:
-                    linear-gradient(
-                        160deg,
-                        rgba(var(--spice-rgb-button), 0.09) 0%,
-                        transparent 65%
-                    ),
-                    var(--spice-card);
+                box-sizing: border-box;
                 display: flex;
                 flex-shrink: 0;
-                gap: 16px;
-                overflow: hidden;
-                padding: 20px var(--vpws-gutter);
+                gap: 14px;
+                padding: 16px var(--vpws-gutter) 14px;
                 position: relative;
+                width: 100%;
             }
-            /* divider line beneath hero */
             .vpws-track::after {
-                content: "";
-                position: absolute;
+                background: rgba(var(--spice-rgb-text), 0.06);
                 bottom: 0;
-                left: var(--vpws-gutter);
-                right: var(--vpws-gutter);
+                content: "";
                 height: 1px;
-                background: linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(var(--spice-rgb-text), 0.1) 25%,
-                    rgba(var(--spice-rgb-text), 0.1) 75%,
-                    transparent
-                );
+                left: 0;
+                position: absolute;
+                right: 0;
             }
 
-            /* ── Track artwork (shared placeholder style) ── */
             .vpws-track-art,
             .vpws-playlist-art {
-                background: linear-gradient(
-                    135deg,
-                    rgba(var(--spice-rgb-selected-row), 0.5),
-                    rgba(var(--spice-rgb-shadow), 0.25)
-                );
+                background: rgba(var(--spice-rgb-selected-row), 0.35);
                 border-radius: 8px;
                 display: block;
                 flex-shrink: 0;
                 object-fit: cover;
             }
             .vpws-track-art {
-                height: 68px;
-                width: 68px;
-                box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+                height: 56px;
+                width: 56px;
             }
             .vpws-track-info {
                 flex: 1;
                 min-width: 0;
             }
-            .vpws-track-actions {
-                align-items: center;
-                display: flex;
-                flex-shrink: 0;
-                gap: 10px;
-            }
             .vpws-track-title {
-                font-size: 19px;
+                font-size: 16px;
                 font-weight: 800;
                 letter-spacing: -0.02em;
                 line-height: 1.2;
@@ -203,30 +155,34 @@
             }
             .vpws-track-meta {
                 color: var(--spice-subtext);
-                font-size: 13px;
+                font-size: 12px;
                 line-height: 1.5;
-                margin: 3px 0 0;
+                margin: 2px 0 0;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
+            .vpws-track-actions {
+                align-items: center;
+                display: flex;
+                flex-shrink: 0;
+                gap: 6px;
+            }
 
-            /* ── Progress bar ────────────────────────────── */
-            /*  Horizontal padding keeps the bar off the edges.
-                Vertical padding gives it breathing room.       */
+            /* ── Progress bar ── */
             .vpws-progress-wrap {
                 align-items: center;
-                background: var(--spice-card);
                 box-sizing: border-box;
                 display: flex;
                 flex-shrink: 0;
-                padding: 8px var(--vpws-gutter) 6px;
+                padding: 6px var(--vpws-gutter) 4px;
+                width: 100%;
             }
             .vpws-progress {
-                background: rgba(var(--spice-rgb-text), 0.08);
+                background: rgba(var(--spice-rgb-text), 0.07);
                 border-radius: 2px;
                 flex: 1;
-                height: 3px;
+                height: 2px;
                 overflow: hidden;
             }
             .vpws-progress-bar {
@@ -237,137 +193,110 @@
                 will-change: width;
             }
 
-            /* ── Status row ──────────────────────────────── */
+            /* ── Status row ── */
             .vpws-status-row {
                 align-items: center;
-                background: var(--spice-card);
                 box-sizing: border-box;
                 display: flex;
                 flex-shrink: 0;
-                gap: 12px;
                 justify-content: space-between;
-                padding: 6px var(--vpws-gutter) 10px;
+                padding: 6px var(--vpws-gutter) 8px;
+                width: 100%;
             }
             .vpws-summary {
                 color: var(--spice-subtext);
-                font-size: 11px;
+                font-size: 10px;
                 font-weight: 700;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.1em;
                 margin: 0;
-                opacity: 0.75;
                 text-transform: uppercase;
             }
 
-            /* ── Results (capped scroll list) ───────────── */
+            /* ── Results list ── */
             .vpws-results-wrap {
                 box-sizing: border-box;
                 max-height: 360px;
                 overflow-x: hidden;
                 overflow-y: auto;
-                padding: 10px var(--vpws-gutter) 20px;
+                padding: 8px var(--vpws-gutter) 20px;
                 scrollbar-width: none;
                 -ms-overflow-style: none;
+                width: 100%;
             }
-            .vpws-results-wrap::-webkit-scrollbar {
-                display: none;
-                width: 0;
-                height: 0;
-            }
+            .vpws-results-wrap::-webkit-scrollbar { display: none; width: 0; height: 0; }
             .vpws-results {
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
+                gap: 6px;
             }
 
-            /* ── Empty state ─────────────────────────────── */
-            /*  Normal-flow block with own min-height so it   */
-            /*  centers its content without needing a parent  */
-            /*  with a definite height.                        */
+            /* ── Empty state — robust centering ── */
             .vpws-empty {
-                align-items: center;
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
+                align-items: center;
                 justify-content: center;
                 min-height: 160px;
-                padding: 24px var(--vpws-gutter);
+                padding: 32px var(--vpws-gutter) 28px;
                 text-align: center;
                 width: 100%;
             }
             .vpws-empty-icon {
-                display: block;
-                font-size: 38px;
+                font-size: 30px;
                 line-height: 1;
-                margin-bottom: 14px;
-                opacity: 0.35;
-                text-align: center;
-                width: 100%;
+                margin-bottom: 12px;
+                opacity: 0.25;
             }
             .vpws-empty-text {
                 color: var(--spice-subtext);
-                display: block;
                 font-size: 13px;
                 font-weight: 500;
                 line-height: 1.6;
-                margin: 0 auto;
-                max-width: 280px;
-                opacity: 0.85;
-                text-align: center;
+                margin: 0;
+                max-width: 260px;
             }
 
-            /* ── Playlist Card ───────────────────────────── */
+            /* ── Playlist card ── */
             .vpws-card {
                 align-items: center;
-                animation: vpws-card-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
-                background: rgba(var(--spice-rgb-main-elevated), 0.55);
-                border: 1px solid rgba(var(--spice-rgb-shadow), 0.1);
+                animation: vpws-card-in 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
+                background: rgba(var(--spice-rgb-main-elevated), 0.45);
+                border: 1px solid rgba(var(--spice-rgb-text), 0.06);
                 border-radius: 10px;
                 cursor: pointer;
                 display: grid;
-                gap: 14px;
-                grid-template-columns: 48px 1fr auto;
+                gap: 12px;
+                grid-template-columns: 46px 1fr auto;
                 opacity: 0;
-                padding: 10px 16px;
-                transform: translateY(8px);
-                transition:
-                    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    background 0.2s ease,
-                    border-color 0.2s ease,
-                    box-shadow 0.25s ease;
+                padding: 9px 14px;
+                transform: translateY(6px);
+                transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.15s ease, border-color 0.15s ease;
                 will-change: transform;
             }
             @keyframes vpws-card-in {
                 to { opacity: 1; transform: translateY(0); }
             }
             .vpws-card:hover {
-                background: rgba(var(--spice-rgb-main-elevated), 0.85);
-                border-color: rgba(var(--spice-rgb-button), 0.25);
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+                background: rgba(var(--spice-rgb-main-elevated), 0.8);
+                border-color: rgba(var(--spice-rgb-text), 0.12);
                 transform: translateY(-1px);
             }
-            .vpws-card:active {
-                transform: scale(0.985);
-                transition-duration: 0.08s;
-            }
-            .vpws-card:focus-visible {
-                border-radius: 10px;
-                outline: 2px solid var(--spice-button);
-                outline-offset: 2px;
-            }
+            .vpws-card:active { transform: scale(0.988); transition-duration: 0.07s; }
+            .vpws-card:focus-visible { outline: 2px solid var(--spice-button); outline-offset: 2px; }
 
             .vpws-playlist-art {
                 border-radius: 6px;
-                height: 48px;
+                height: 46px;
                 transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-                width: 48px;
+                width: 46px;
             }
-            .vpws-card:hover .vpws-playlist-art {
-                transform: scale(1.06);
-            }
+            .vpws-card:hover .vpws-playlist-art { transform: scale(1.05); }
+
             .vpws-playlist-title {
                 color: var(--spice-text);
                 font-size: 14px;
-                font-weight: 700;
+                font-weight: 600;
                 line-height: 1.3;
                 margin: 0;
                 overflow: hidden;
@@ -379,86 +308,64 @@
                 font-size: 12px;
                 line-height: 1.35;
                 margin: 2px 0 0;
-                max-width: 420px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
 
-            /* ── Track position badge ────────────────────── */
+            /* ── Position badge ── */
             .vpws-badge {
-                background: rgba(var(--spice-rgb-button), 0.12);
+                background: rgba(var(--spice-rgb-button), 0.1);
                 border-radius: 6px;
                 color: var(--spice-button);
                 flex-shrink: 0;
-                font-size: 12px;
+                font-size: 11px;
                 font-weight: 700;
                 letter-spacing: 0.02em;
-                padding: 4px 10px;
-                transition: background 0.2s ease;
+                padding: 3px 9px;
+                transition: background 0.15s ease;
                 white-space: nowrap;
             }
-            .vpws-card:hover .vpws-badge {
-                background: rgba(var(--spice-rgb-button), 0.22);
-            }
+            .vpws-card:hover .vpws-badge { background: rgba(var(--spice-rgb-button), 0.2); }
 
-            /* ── Ghost open-track button ─────────────────── */
+            /* ── Buttons ── */
             .vpws-btn {
                 appearance: none;
-                background: var(--spice-button);
-                border: 0;
+                background: rgba(var(--spice-rgb-text), 0.07);
+                border: 1px solid rgba(var(--spice-rgb-text), 0.1);
                 border-radius: 999px;
-                color: var(--spice-button-text);
-                cursor: pointer;
-                font-size: 12px;
-                font-weight: 700;
-                letter-spacing: 0.02em;
-                padding: 7px 14px;
-                transition:
-                    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    filter 0.15s ease;
-                will-change: transform;
-            }
-            .vpws-btn:hover {
-                filter: brightness(1.1);
-                transform: scale(1.03);
-            }
-            .vpws-btn:active {
-                transform: scale(0.96);
-                transition-duration: 0.06s;
-            }
-            .vpws-btn--ghost {
-                background: transparent;
-                border: 1px solid rgba(var(--spice-rgb-text), 0.15);
                 color: var(--spice-text);
+                cursor: pointer;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.04em;
+                padding: 6px 14px;
+                text-transform: uppercase;
+                transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
             }
-            .vpws-btn--ghost:hover {
-                background: rgba(var(--spice-rgb-text), 0.04);
-                border-color: rgba(var(--spice-rgb-text), 0.3);
-            }
+            .vpws-btn:hover { background: rgba(var(--spice-rgb-text), 0.12); border-color: rgba(var(--spice-rgb-text), 0.2); transform: translateY(-1px); }
+            .vpws-btn:active { transform: scale(0.96); transition-duration: 0.06s; }
+            .vpws-btn--ghost { background: transparent; border-color: rgba(var(--spice-rgb-text), 0.12); color: var(--spice-subtext); }
+            .vpws-btn--ghost:hover { background: rgba(var(--spice-rgb-text), 0.06); border-color: rgba(var(--spice-rgb-text), 0.22); color: var(--spice-text); }
+
+            /* ── GitHub link ── */
             .vpws-githubLink {
                 align-items: center;
                 border-radius: 999px;
                 color: var(--spice-subtext);
                 display: inline-flex;
-                height: 36px;
+                height: 30px;
                 justify-content: center;
                 text-decoration: none;
                 transition: color 0.15s ease, background 0.15s ease;
-                width: 36px;
+                width: 30px;
             }
-            .vpws-githubLink:hover {
-                background: rgba(var(--spice-rgb-text), 0.04);
-                color: var(--spice-text);
-            }
-            .vpws-githubLink:focus-visible {
-                outline: 2px solid var(--spice-button);
-                outline-offset: 2px;
-            }
+            .vpws-githubLink:hover { background: rgba(var(--spice-rgb-text), 0.08); color: var(--spice-text); }
+            .vpws-githubLink:focus-visible { outline: 2px solid var(--spice-button); outline-offset: 2px; }
 
-            /* ── Cached badge ─────────────────────────────── */
+            /* ── Cached badge ── */
             .vpws-cached-tag {
-                background: rgba(var(--spice-rgb-button), 0.08);
+                background: rgba(var(--spice-rgb-button), 0.07);
                 border-radius: 4px;
                 color: var(--spice-subtext);
                 font-size: 10px;
@@ -468,63 +375,26 @@
                 text-transform: uppercase;
             }
 
-            /* ── Responsive ──────────────────────────────── */
-            @media (max-width: 640px) {
-                .vpws-modal {
-                    --vpws-gutter: 14px;
-                    width: 96vw;
-                }
-                .vpws-track {
-                    flex-wrap: wrap;
-                }
-                .vpws-track-art {
-                    height: 52px;
-                    width: 52px;
-                }
-                .vpws-track-actions {
-                    width: 100%;
-                }
-                .vpws-githubLink {
-                    margin-left: auto;
-                }
-                .vpws-track-title { font-size: 16px; }
-                .vpws-card {
-                    gap: 10px;
-                    grid-template-columns: 40px 1fr auto;
-                    padding: 8px 10px;
-                }
-                .vpws-playlist-art {
-                    height: 40px;
-                    width: 40px;
-                }
-                .vpws-results-wrap {
-                    max-height: 55vh;
-                }
+            /* ── Responsive ── */
+            @media (max-width: 520px) {
+                .vpws-modal { --vpws-gutter: 14px; }
+                .vpws-track { flex-wrap: wrap; }
+                .vpws-track-art { height: 48px; width: 48px; }
+                .vpws-track-actions { width: 100%; }
+                .vpws-githubLink { margin-left: auto; }
+                .vpws-track-title { font-size: 15px; }
+                .vpws-card { gap: 10px; grid-template-columns: 38px 1fr auto; padding: 8px 10px; }
+                .vpws-playlist-art { height: 38px; width: 38px; }
+                .vpws-results-wrap { max-height: 55vh; }
             }
 
-            /* ── Reduced motion ──────────────────────────── */
+            /* ── Reduced motion ── */
             @media (prefers-reduced-motion: reduce) {
-                .vpws-card {
-                    animation: none;
-                    opacity: 1;
-                    transform: none;
-                }
-                .vpws-card:hover {
-                    transform: none;
-                }
-                .vpws-card:active {
-                    transform: none;
-                }
-                .vpws-btn:hover,
-                .vpws-btn:active {
-                    transform: none;
-                }
-                .vpws-card:hover .vpws-playlist-art {
-                    transform: none;
-                }
-                .vpws-progress-bar {
-                    transition: none;
-                }
+                .vpws-card { animation: none; opacity: 1; transform: none; }
+                .vpws-card:hover, .vpws-card:active { transform: none; }
+                .vpws-btn:hover, .vpws-btn:active { transform: none; }
+                .vpws-card:hover .vpws-playlist-art { transform: none; }
+                .vpws-progress-bar { transition: none; }
             }
         `;
 
@@ -1163,7 +1033,7 @@
         PopupModal.display({
             content: react.createElement(ResultsModal, { targetUri: trackUri }),
             isLarge: true,
-            title: "Melior: Find in Playlists",
+            title: "Melior: Find song in playlists",
         });
     }
 
