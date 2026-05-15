@@ -117,7 +117,7 @@ This version is a substantial modernization focused on current Spicetify compati
 
 ## Related Projects
 
-- [Symphona](https://github.com/pandadoor/spicetify-symphona) - a routed playlist comparison extension for overlap and exclusive-track analysis.
+- [Symphona](https://github.com/illocean/spicetify-symphona) - a routed playlist comparison extension for overlap and exclusive-track analysis.
 
 ## Repository Contents
 

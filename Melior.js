@@ -798,10 +798,10 @@
                     "a",
                     {
                         className: "vpws-githubLink",
-                        href: "https://github.com/pandadoor",
+                        href: "https://github.com/illocean",
                         rel: "noopener noreferrer",
                         target: "_blank",
-                        title: "View pandadoor on GitHub",
+                        title: "View illocean on GitHub",
                     },
                     react.createElement(
                         "svg",
